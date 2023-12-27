@@ -25,6 +25,7 @@ class U2AndroidConfig:
     delay: float
     bluestacks_config_path: Optional[str] = None
     bluestacks_config_keyword: Optional[str] = None
+    mumuManager_path: Optional[str] = None
 
     _bluestacks_port: Optional[str] = field(init=False, repr=False, default=None)
 
@@ -51,6 +52,7 @@ class U2AndroidConfig:
     @staticmethod
     def load(config: Config):
         return U2AndroidConfig(
+            mumuManager_path=config.bot.auto.mumuManager,
             _device_name=config.bot.auto.adb.device_name,
             delay=config.bot.auto.adb.delay,
             bluestacks_config_path=config.bot.auto.adb.bluestacks_config_path,
@@ -163,6 +165,14 @@ class U2AndroidController(AndroidController):
     def kill_adb_server(self):
         p = os.run_cmd(self.path + "adb kill-server").communicate()
         log.debug(p[0].decode())
+
+    # shutdown_emulator 关闭模拟器
+    def shutdown_emulator(self):
+        if (self.config.mumuManager_path != None and self.config.mumuManager_path != ""):
+            p = os.run_cmd(self.config.mumuManager_path + " api shutdown_player").communicate()
+            log.debug(p[0].decode())
+        else:
+            log.debug("需要指定MuMuManager路径才能执行关闭模拟器功能")
 
     # check_file_exist 判断文件是否存在
     def check_file_exist(self, file_path, file_name):

@@ -69,7 +69,9 @@ class Scheduler:
                                         task.cron_job_config.next_time = cron.get_next(datetime.datetime)
                     else:
                         log.warning("未知任务类型：" + str(task.task_execute_mode) + ", task_id: " + str(task.task_id))
-
+                if True: #TODO: 是否设置清空任务后关闭模拟器
+                    executor.get_controller().shutdown_emulator()
+                    self.active = False
             else:
                 if task_executor.active:
                     task_executor.stop()
