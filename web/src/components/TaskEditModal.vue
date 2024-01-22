@@ -913,6 +913,10 @@ export default {
           preset.skill_priority_list.push([this.skillLearnPriorityList[i].skills])
         }
       }
+      if (preset.skill_priority_list == [])
+      {
+        preset.skill_priority_list = [[]]
+      }
       let payload = {
         "preset": JSON.stringify(preset)
       }
